@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 544735452689.dkr.ecr.us-east-2.amazonaws.com
+  build:
+    commands:
+      - docker build -t recogno-silk:latest .
+      - docker tag recogno-silk:latest 544735452689.dkr.ecr.us-east-2.amazonaws.com/recogno-silk:latest
+  post_build:
+    commands:
+      - docker push 544735452689.dkr.ecr.us-east-2.amazonaws.com/recogno-silk:latest
+      - printf '[{"name":"recogno-container","imageUri":"%s"}]' 544735452689.dkr.ecr.us-east-2.amazonaws.com/recogno-silk:latest > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json

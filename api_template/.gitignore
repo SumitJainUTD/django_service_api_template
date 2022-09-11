@@ -1,0 +1,4 @@
+database/
+.env
+/config/.env
+*.sqlite3
